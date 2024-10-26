@@ -16,6 +16,19 @@ namespace iiMenu.Classes
 				MakeButtonSound(relatedText);
 				Toggle(relatedText, true);
             }
-		}
+
+            if (collider.GetComponentInParent<GorillaTriggerColliderHandIndicator>() == null)
+            {
+                return;
+            }
+
+            GorillaTriggerColliderHandIndicator component = collider.GetComponent<GorillaTriggerColliderHandIndicator>();
+            if (!(component == null))
+            {
+                buttonCooldown = Time.time + 0.2f;
+                MakeButtonSound(relatedText);
+                Toggle(relatedText, true);
+            }
+        }
 	}
 }

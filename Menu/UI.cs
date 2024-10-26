@@ -16,7 +16,7 @@ namespace iiMenu.UI
 {
     public class Main : MonoBehaviour
     {
-        private string inputText = "goldentrophy";
+        private string inputText = "artemius466";
 
         private string r = "255";
 
@@ -83,6 +83,7 @@ namespace iiMenu.UI
 
             if (isOpen)
             {
+
                 GUI.skin.textField.fontSize = 13;
                 GUI.skin.button.fontSize = 20;
                 GUI.skin.textField.font = activeFont;
@@ -91,6 +92,8 @@ namespace iiMenu.UI
                 GUI.skin.textField.fontStyle = activeFontStyle;
                 GUI.skin.button.fontStyle = activeFontStyle;
                 GUI.skin.label.fontStyle = activeFontStyle;
+
+                
 
                 Color victimColor = GetIndex("Swap GUI Colors").enabled ? textColor : GetBGColor(0f);
 
@@ -129,7 +132,7 @@ namespace iiMenu.UI
 
                         GUIStyle style = new GUIStyle(GUI.skin.label);
                         style.alignment = TextAnchor.LowerRight;
-                        GUI.Label(new Rect(Screen.width - 590, Screen.height - 75, 512, 64), "Build "+PluginInfo.Version+"\n"+(serverLink.Replace("https://", "")), style);
+                        GUI.Label(new Rect(Screen.width - 590, Screen.height - 75, 512, 64), "Build "+PluginInfo.Version+"\n"+("very cool menu for people that dont touch grass :>"), style);
                     }
                 }
                 catch { }
@@ -171,6 +174,7 @@ namespace iiMenu.UI
                 {
                     Create = UnityInput.Current.GetKey(KeyCode.LeftControl);
                 } catch { }
+
                 if (GUI.Button(new Rect(Screen.width - 200, 90, 85, 30), Create ? "Create" : "Join"))
                 {
                     if (Create)

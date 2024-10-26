@@ -148,6 +148,124 @@ namespace iiMenu.Mods
             CreateRoom(RandomRoomName(), true);
         }
 
+        public static bool tryingToConnect = false;
+        public static int currentRussianToTry;
+        public static float roomDelay;
+
+        public static void CreateRussian() // Не выключать функцию, она сама выключится!
+        {
+            if (!PhotonNetwork.InRoom && tryingToConnect == false)
+            {
+                currentRussianToTry = 0;
+                tryingToConnect = true; // тоже костыль
+
+                if (currentRussianToTry == 0)
+                {
+                    Notifications.NotifiLib.SendNotification($"<color=red>[RUSSIAN MASTER]</color> JOINING ROOM <color=cyan>RUSSIAN</color>");
+                    Utilla.Utils.RoomUtils.JoinPrivateLobby($"RUSSIAN");
+                }
+                else
+                {
+                    Notifications.NotifiLib.SendNotification($"<color=red>[RUSSIAN MASTER]</color> JOINING ROOM <color=cyan>RUSSIAN{currentRussianToTry}</color>");
+                    Utilla.Utils.RoomUtils.JoinPrivateLobby($"RUSSIAN{currentRussianToTry}");
+                }
+
+                roomDelay = Time.time + 15f;
+            }
+
+            if (Time.time > roomDelay) // Костыль
+            {
+                currentRussianToTry++;
+
+                if (currentRussianToTry == 0)
+                {
+                    Notifications.NotifiLib.SendNotification($"<color=red>[RUSSIAN MASTER]</color> JOINING ROOM <color=cyan>RUSSIAN</color>");
+                    Utilla.Utils.RoomUtils.JoinPrivateLobby($"RUSSIAN");
+                }
+                else
+                {
+                    Notifications.NotifiLib.SendNotification($"<color=red>[RUSSIAN MASTER]</color> JOINING ROOM <color=cyan>RUSSIAN{currentRussianToTry}</color>");
+                    Utilla.Utils.RoomUtils.JoinPrivateLobby($"RUSSIAN{currentRussianToTry}");
+                }
+                roomDelay = Time.time + 15f;
+            }
+
+            if (PhotonNetwork.InRoom) // Если подключились
+            {
+                Notifications.NotifiLib.SendNotification($"<color=red>[RUSSIAN MASTER]</color> JOINED ROOM <color=cyan>RUSSIAN{currentRussianToTry}</color>");
+                if (PhotonNetwork.CurrentRoom.PlayerCount != 1) // Если в руме кто-то кроме нас, то подключаемся к следующему
+                {
+                    PhotonNetwork.Disconnect();
+
+                    currentRussianToTry++;
+
+                    if (currentRussianToTry == 0)
+                    {
+                        Notifications.NotifiLib.SendNotification($"<color=red>[RUSSIAN MASTER]</color> JOINING ROOM <color=cyan>RUSSIAN</color>");
+                        Utilla.Utils.RoomUtils.JoinPrivateLobby($"RUSSIAN");
+                    }
+                    else
+                    {
+                        Notifications.NotifiLib.SendNotification($"<color=red>[RUSSIAN MASTER]</color> JOINING ROOM <color=cyan>RUSSIAN{currentRussianToTry}</color>");
+                        Utilla.Utils.RoomUtils.JoinPrivateLobby($"RUSSIAN{currentRussianToTry}");
+                    }
+
+                    roomDelay = Time.time + 15f; // Костыль
+                }
+                else
+                {
+                    Toggle("Create Russian");
+                    tryingToConnect = false;
+                }
+            }
+        }
+
+        public static void JoinRussian() // Не выключать функцию, она сама выключится!
+        {
+            if (!PhotonNetwork.InRoom && tryingToConnect == false)
+            {
+                currentRussianToTry = 0;
+                tryingToConnect = true;
+
+                if (currentRussianToTry == 0)
+                {
+                    Notifications.NotifiLib.SendNotification($"<color=red>[RUSSIAN MASTER]</color> JOINING ROOM <color=cyan>RUSSIAN</color>");
+                    Utilla.Utils.RoomUtils.JoinPrivateLobby($"RUSSIAN");
+                }
+                else
+                {
+                    Notifications.NotifiLib.SendNotification($"<color=red>[RUSSIAN MASTER]</color> JOINING ROOM <color=cyan>RUSSIAN{currentRussianToTry}</color>");
+                    Utilla.Utils.RoomUtils.JoinPrivateLobby($"RUSSIAN{currentRussianToTry}");
+                }
+
+                roomDelay = Time.time + 15f;
+            }
+
+            if (Time.time > roomDelay) // Очень говняный код, мне было лень писать
+            { // Если долго не получается подключиться
+                currentRussianToTry++;
+
+                if (currentRussianToTry == 0)
+                {
+                    Notifications.NotifiLib.SendNotification($"<color=red>[RUSSIAN MASTER]</color> JOINING ROOM <color=cyan>RUSSIAN</color>");
+                    Utilla.Utils.RoomUtils.JoinPrivateLobby($"RUSSIAN");
+                }
+                else
+                {
+                    Notifications.NotifiLib.SendNotification($"<color=red>[RUSSIAN MASTER]</color> JOINING ROOM <color=cyan>RUSSIAN{currentRussianToTry}</color>");
+                    Utilla.Utils.RoomUtils.JoinPrivateLobby($"RUSSIAN{currentRussianToTry}");
+                }
+                roomDelay = Time.time + 15f;
+            }
+
+            if (PhotonNetwork.InRoom)
+            {
+                Notifications.NotifiLib.SendNotification($"<color=red>[RUSSIAN MASTER]</color> JOINED ROOM <color=cyan>RUSSIAN{currentRussianToTry}</color>");
+                Toggle("Join Russian");
+                tryingToConnect = false;
+            }
+        }
+
         public static void iisStupidMenuRoom()
         {
             PhotonNetworkController.Instance.AttemptToJoinSpecificRoom("<$II_"+PluginInfo.Version+">", JoinType.Solo);

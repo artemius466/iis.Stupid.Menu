@@ -1293,7 +1293,7 @@ namespace iiMenu.Mods
         public static void ChangePointerPosition()
         {
             pointerIndex++;
-            if (pointerIndex > 3)
+            if (pointerIndex > 1)
             {
                 pointerIndex = 0;
             }
@@ -1301,9 +1301,7 @@ namespace iiMenu.Mods
             Vector3[] pointerPos = new Vector3[]
             {
                 new Vector3(0f, -0.1f, 0f),
-                new Vector3(0f, -0.1f, -0.15f),
-                new Vector3(0f, 0.1f, -0.05f),
-                new Vector3(0f, 0.0666f, 0.1f)
+                new Vector3(-0.01f, -0.09f, 0.027f)
             };
             pointerOffset = pointerPos[pointerIndex];
             try { reference.transform.localPosition = pointerOffset; } catch { }
@@ -1902,15 +1900,15 @@ namespace iiMenu.Mods
                 Projectiles.ChangeTrail();
                 shootCycle = int.Parse(data[7]) - 1;
                 Projectiles.ChangeShootSpeed();
-                pointerIndex = int.Parse(data[8]) - 1;
+                pointerIndex = 1;
                 ChangePointerPosition();
                 tagAuraIndex = int.Parse(data[9]) - 1;
                 Advantages.ChangeTagAuraRange();
                 notificationDecayTime = int.Parse(data[10]) - 1000;
                 ChangeNotificationTime();
-                fontStyleType = int.Parse(data[11]) - 1;
+                fontStyleType = 1;
                 ChangeFontStyleType();
-                arrowType = int.Parse(data[12]) - 1;
+                arrowType = 0;
                 ChangeArrowType();
                 pcbg = int.Parse(data[13]) - 1;
                 ChangePCUI();
@@ -1929,11 +1927,11 @@ namespace iiMenu.Mods
                 Sound.SoundBindings();
             } catch { UnityEngine.Debug.Log("Save file out of date"); }
 
-            pageButtonType = int.Parse(textData[3]) - 1;
+            pageButtonType = 5;
             Toggle("Change Page Type");
-            themeType = int.Parse(textData[4]) - 1;
+            themeType = 39;
             Toggle("Change Menu Theme");
-            fontCycle = int.Parse(textData[5]) - 1;
+            fontCycle = 4;
             Toggle("Change Font Type");
 
             NotifiLib.ClearAllNotifications();

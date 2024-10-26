@@ -11,7 +11,7 @@ namespace iiMenu
     {
         private void Start() // To that one dude that uses SMI to inject my menu, it's this method
         {
-            Console.Title = "ii's Stupid Menu // Build " + PluginInfo.Version;
+            //Console.Title = "ii's Stupid Menu // Build " + PluginInfo.Version;
 
             iiMenu.Patches.Menu.ApplyHarmonyPatches();
             GameObject Loading = new GameObject();

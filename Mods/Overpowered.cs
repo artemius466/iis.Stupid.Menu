@@ -6,8 +6,10 @@ using GorillaTagScripts;
 using HarmonyLib;
 using iiMenu.Classes;
 using iiMenu.Notifications;
+using Pathfinding;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -15,10 +17,24 @@ using UnityEngine.InputSystem;
 using static iiMenu.Classes.RigManager;
 using static iiMenu.Menu.Main;
 
+
+
+
 namespace iiMenu.Mods
 {
     public class Overpowered
     {
+        public static void BreakInfection1()
+        {
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                Player player2 = player;
+                Hashtable hashtable = new Hashtable();
+                hashtable.Add("didTutorial", "nope");
+                player2.SetCustomProperties(hashtable, null, null);
+            }
+        }
+
         public static void MasterCheck()
         {
             if (PhotonNetwork.IsMasterClient)
@@ -31,6 +47,7 @@ namespace iiMenu.Mods
             }
         }
 
+<<<<<<< Updated upstream
         public static void StartMoonEvent()
         {
             GreyZoneManager gzm = GameObject.Find("Environment Objects/05Maze_PersistentObjects/Halloween2024_PersistentObjects/GreyZoneManager").GetComponent<GreyZoneManager>();
@@ -72,9 +89,117 @@ namespace iiMenu.Mods
             else { NotifiLib.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> <color=white>You are not master client.</color>"); }
         }
 
+=======
+        public static void LurkerGun()
+        {
+            LurkerGhost lg = GameObject.Find("Environment Objects/05Maze_PersistentObjects/Halloween2024_PersistentObjects/Halloween Ghosts/Lurker Ghost/GhostLurker_Prefab").GetComponent<LurkerGhost>();
+
+            if (rightGrab || Mouse.current.rightButton.isPressed)
+            {
+                var GunData = RenderGun();
+                RaycastHit Ray = GunData.Ray;
+                GameObject NewPointer = GunData.NewPointer;
+
+                if (isCopying && whoCopy != null)
+                {
+                    NetPlayer buddy = GetPlayerFromVRRig(whoCopy);
+
+                    Type type = typeof(LurkerGhost).Assembly.GetType("GorillaTagScripts.LurkerGhost+ghostState");
+                    object val = Enum.ToObject(type, 1);
+
+                    NotifiLib.SendNotification(val.ToString());
+
+                    Debug.Log(val);
+
+                    Traverse.Create(lg).Method("PickPlayer", buddy).GetValue();
+                    Traverse.Create(lg).Method("ChangeState", val).GetValue();
+                }
+                if (rightTrigger > 0.5f || Mouse.current.leftButton.isPressed)
+                {
+                    VRRig possibly = Ray.collider.GetComponentInParent<VRRig>();
+                    if (possibly && possibly != GorillaTagger.Instance.offlineVRRig)
+                    {
+                        isCopying = true;
+                        whoCopy = possibly;
+                    }
+                }
+            }
+            else
+            {
+                if (isCopying)
+                {
+                    isCopying = false;
+                }
+            }
+        }
+
+        public static void SpawnLurker()
+        {
+            LurkerGhost lg = GameObject.Find("Environment Objects/05Maze_PersistentObjects/Halloween2024_PersistentObjects/Halloween Ghosts/Lurker Ghost/GhostLurker_Prefab").GetComponent<LurkerGhost>();
+
+            if (lg.IsMine)
+            {
+                Type type = typeof(LurkerGhost).Assembly.GetType("GorillaTagScripts.LurkerGhost+ghostState");
+                object val = Enum.ToObject(type, 1);
+
+                NotifiLib.SendNotification(val.ToString());
+
+                Debug.Log(val);
+
+                float nerd = 2000f;
+
+                Traverse.Create(lg).Method("PickPlayer", nerd).GetValue();
+                Traverse.Create(lg).Method("ChangeState", val).GetValue();
+            }
+            else { NotifiLib.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> <color=white>You are not master client.</color>"); }
+        }
+
+        public static void DespawnLurker()
+        {
+            LurkerGhost lg = GameObject.Find("Environment Objects/05Maze_PersistentObjects/Halloween2024_PersistentObjects/Halloween Ghosts/Lurker Ghost/GhostLurker_Prefab").GetComponent<LurkerGhost>();
+            try
+            {
+                if (lg.IsMine)
+                {
+                    Type type = typeof(LurkerGhost).Assembly.GetType("GorillaTagScripts.LurkerGhost+ghostState");
+                    object val = Enum.ToObject(type, 0);
+
+                    NotifiLib.SendNotification(val.ToString());
+
+                    Debug.Log(val);
+
+                    Traverse.Create(lg).Method("ChangeState", val).GetValue();
+                }
+                else
+                {
+                    NotifiLib.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> <color=white>You are not master client.</color>");
+                }
+            }
+            catch (Exception e)
+            {
+                NotifiLib.SendNotification("FUCKKKKK");
+                Debug.Log(e);
+            }
+        }
+
+
+
+        public static void SeeLurker()
+        {
+            LurkerGhost lg = GameObject.Find("Environment Objects/05Maze_PersistentObjects/Halloween2024_PersistentObjects/Halloween Ghosts/Lurker Ghost/GhostLurker_Prefab").GetComponent<LurkerGhost>();
+
+            if (lg.meshRenderer.sharedMaterial != lg.visibleMaterial || lg.bonesMeshRenderer.sharedMaterial != lg.visibleMaterialBones)
+            {
+                lg.meshRenderer.sharedMaterial = lg.visibleMaterial;
+                lg.bonesMeshRenderer.sharedMaterial = lg.visibleMaterialBones;
+                //NotifiLib.SendNotification("mat updated");
+            }
+        }
+
+>>>>>>> Stashed changes
         public static void SpawnBlueLucy()
         {
-            HalloweenGhostChaser hgc = GameObject.Find("Environment Objects/05Maze_PersistentObjects/Halloween2024_PersistentObjects/Halloween Ghosts/Lucy/Halloween Ghost/FloatingChaseSkeleton").GetComponent<HalloweenGhostChaser>();
+            HalloweenGhostChaser hgc = GameObject.Find("Environment Objects/05Maze_PersistentObjects/Halloween2024_PersistentObjects/Halloween Ghosts/Lucy/Halloween Ghost/FloatingChaseSkeleton/").GetComponent<HalloweenGhostChaser>();
             if (hgc.IsMine)
             {
                 hgc.timeGongStarted = Time.time;
@@ -244,6 +369,39 @@ namespace iiMenu.Mods
                 }
             }
             else { NotifiLib.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> <color=white>You are not master client.</color>"); }
+        }
+
+        public static void LucyGun()
+        {
+            if (rightGrab || Mouse.current.rightButton.isPressed)
+            {
+                var GunData = RenderGun();
+                RaycastHit Ray = GunData.Ray;
+                GameObject NewPointer = GunData.NewPointer;
+
+                if (rightTrigger > 0.5f || Mouse.current.leftButton.isPressed)
+                {
+                    if (!PhotonNetwork.IsMasterClient) { NotifiLib.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> <color=white>You are not master client.</color>"); return; }
+                    //foreach (MonkeyeAI monkeyeAI in GetMonsters())
+                    //{
+                    //    if (!PhotonNetwork.IsMasterClient) { NotifiLib.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> <color=white>You are not master client.</color>"); return; } // GetOwnership(monkeyeAI.GetComponent<PhotonView>());
+                    //    monkeyeAI.gameObject.transform.position = NewPointer.transform.position + new Vector3(0f, 1f, 0f);
+                    //}
+
+                    HalloweenGhostChaser hgc = GameObject.Find("Environment Objects/05Maze_PersistentObjects/Halloween2024_PersistentObjects/Halloween Ghosts/Lucy/Halloween Ghost/FloatingChaseSkeleton").GetComponent<HalloweenGhostChaser>();
+
+                    hgc.gameObject.transform.position = NewPointer.transform.position + new Vector3(0f, 0f, 0f);
+                }
+            }
+        }
+
+        public static void BecomeLucy()
+        {
+            HalloweenGhostChaser hgc = GameObject.Find("Environment Objects/05Maze_PersistentObjects/Halloween2024_PersistentObjects/Halloween Ghosts/Lucy/Halloween Ghost/FloatingChaseSkeleton").GetComponent<HalloweenGhostChaser>();
+
+            Vector3 startpos = GorillaTagger.Instance.bodyCollider.transform.position + new Vector3(0f, 0f, 0f);
+
+            hgc.gameObject.transform.position = startpos;
         }
 
         public static void FastLucy()

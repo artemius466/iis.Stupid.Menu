@@ -212,7 +212,7 @@ namespace iiMenu.Mods
             }
         }
 
-        /*
+        
         public static void InstantParty()
         {
             typeof(FriendshipGroupDetection).GetField("groupTime", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(FriendshipGroupDetection.Instance, 0f);
@@ -220,19 +220,19 @@ namespace iiMenu.Mods
             typeof(FriendshipGroupDetection).GetField("amFirstProvisionalPlayer", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(FriendshipGroupDetection.Instance, true);
         }
 
-        public static void PartyAll()
-        {
-            List<string> people = new List<string> { };
-            foreach (Photon.Realtime.Player plr in PhotonNetwork.PlayerListOthers)
-            {
-                people.Add(plr.UserId);
-            }
-            FriendshipGroupDetection.Instance.photonView.RPC("AddPartyMembers", RpcTarget.Others, new object[]
-            {
-                FriendshipGroupDetection.PackColor(new Color(0f, 0f, 0f)),
-                people.ToArray()
-            });
-        }*/
+        //public static void PartyAll()
+        //{
+        //    List<string> people = new List<string> { };
+        //    foreach (Photon.Realtime.Player plr in PhotonNetwork.PlayerListOthers)
+        //    {
+        //        people.Add(plr.UserId);
+        //    }
+        //    FriendshipGroupDetection.Instance.photonView.RPC("AddPartyMembers", RpcTarget.Others, new object[]
+        //    {
+        //        FriendshipGroupDetection.PackColor(new Color(0f, 0f, 0f)),
+        //        people.ToArray()
+        //    });
+        //}
 
         public static void LeaveParty()
         {

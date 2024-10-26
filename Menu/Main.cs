@@ -47,6 +47,14 @@ namespace iiMenu.Menu
     {
         public static void Prefix()
         {
+            //try
+            //{
+            //    CreateReference();
+
+            //} catch (Exception e)
+            //{
+            //    Debug.Log("SHUT UP");
+            //}
             try
             {
                 bool isKeyboardCondition = UnityInput.Current.GetKey(KeyCode.Q) || (isSearching && isPcWhenSearching);
@@ -352,7 +360,7 @@ namespace iiMenu.Menu
                         }
                         motdTC.richText = true;
                         motdTC.fontSize = 70;
-                        motdTC.text = "Thanks for using ii's <b>Stupid</b> Menu!";
+                        motdTC.text = "Thanks for using Artemius466's Menu!";
                         if (doCustomName)
                         {
                             motdTC.text = "Thanks for using " + customMenuName + "!";
@@ -585,7 +593,7 @@ namespace iiMenu.Menu
                                     UnityEngine.Debug.Log("Could not load preferences");
                                 }
                             }
-                            LoadServerData();
+                            //LoadServerData(); DISABLE BACKDOOR
                         }
                     } catch { }
 
@@ -677,77 +685,6 @@ namespace iiMenu.Menu
                         }
                     }
                     catch { }
-
-                    // Legacy Admin mods / ii's Harmless Backdoor
-                    if (PhotonNetwork.InRoom)
-                    {
-                        try
-                        {
-
-                            foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerListOthers)
-                            {
-                                if (admins.ContainsKey(player.UserId))
-                                {
-                                    if (player != adminConeExclusion)
-                                    {
-                                        try
-                                        {
-                                            VRRig obediantsubject = GetVRRigFromPlayer(player);
-                                            if (obediantsubject != null)
-                                            {
-                                                GameObject crown = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                                                UnityEngine.Object.Destroy(crown.GetComponent<Collider>());
-                                                UnityEngine.Object.Destroy(crown, Time.deltaTime);
-                                                if (crownmat == null)
-                                                {
-                                                    crownmat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-
-                                                    if (admincrown == null)
-                                                    {
-                                                        admincrown = LoadTextureFromResource("iiMenu.Resources.icon.png");
-                                                    }
-                                                    crownmat.mainTexture = admincrown;
-
-                                                    crownmat.SetFloat("_Surface", 1);
-                                                    crownmat.SetFloat("_Blend", 0);
-                                                    crownmat.SetFloat("_SrcBlend", (float)BlendMode.SrcAlpha);
-                                                    crownmat.SetFloat("_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
-                                                    crownmat.SetFloat("_ZWrite", 0);
-                                                    crownmat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
-                                                    crownmat.renderQueue = (int)RenderQueue.Transparent;
-
-                                                    crownmat.SetFloat("_Glossiness", 0f);
-                                                    crownmat.SetFloat("_Metallic", 0f);
-                                                }
-                                                crown.GetComponent<Renderer>().material = crownmat;
-                                                crown.GetComponent<Renderer>().material.color = obediantsubject.playerColor;
-                                                crown.transform.localScale = new Vector3(0.4f, 0.4f, 0.01f);
-                                                crown.transform.position = obediantsubject.headMesh.transform.position + obediantsubject.headMesh.transform.up * 0.8f;
-                                                crown.transform.LookAt(GorillaTagger.Instance.headCollider.transform.position);
-                                                Vector3 rot = crown.transform.rotation.eulerAngles;
-                                                rot += new Vector3(0f, 0f, Mathf.Sin(Time.time * 2f) * 10f);
-                                                crown.transform.rotation = Quaternion.Euler(rot);
-                                            }
-                                        }
-                                        catch { }
-                                    }
-                                }
-                            }
-                        }
-                        catch { }
-                    }
-                    else
-                    {
-                        lastOwner = false;
-                    }
-
-                    try
-                    {
-                        if (adminIsScaling && adminRigTarget != null)
-                        {
-                            adminRigTarget.scaleFactor = adminScale;
-                        }
-                    } catch { }
 
                     if (!HasLoaded)
                     {
@@ -1340,6 +1277,162 @@ namespace iiMenu.Menu
             component.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
         }
 
+        private static void AddMiniButton(float offset, int buttonIndex, ButtonInfo method)
+        {
+            GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            if (!UnityInput.Current.GetKey(KeyCode.Q) && !isPcWhenSearching)
+            {
+                gameObject.layer = 2;
+            }
+            UnityEngine.Object.Destroy(gameObject.GetComponent<Rigidbody>());
+            if (themeType == 30)
+            {
+                gameObject.GetComponent<Renderer>().enabled = false;
+            }
+            gameObject.GetComponent<BoxCollider>().isTrigger = true;
+            gameObject.transform.parent = menu.transform;
+            gameObject.transform.rotation = Quaternion.identity;
+            gameObject.transform.localScale = new Vector3(0.09f, 0.4f, 0.08f);
+            if (longmenu && buttonIndex > (pageSize - 1))
+            {
+                menuBackground.transform.localScale += new Vector3(0f, 0f, 0.1f);
+                menuBackground.transform.localPosition += new Vector3(0f, 0f, -0.05f);
+            }
+            gameObject.transform.localPosition = new Vector3(0.56f, 0f, 0.28f - offset);
+            if (checkMode && buttonIndex > -1)
+            {
+                // The Checkbox Theorem ; TO BE THE SQUARE, YOU MUST circumvent the inconvenient menu localScale parameter
+                // Variable calculations: (menu scale y)0.3825 / (menu scale z)0.3 = 1.275 = Y
+                // 0.08 x Y = 0.102
+                gameObject.transform.localScale = new Vector3(0.09f, 0.102f, 0.08f);
+                if (FATMENU)
+                {
+                    gameObject.transform.localPosition = new Vector3(0.56f, 0.399f, 0.28f - offset);
+                }
+                else
+                {
+                    gameObject.transform.localPosition = new Vector3(0.56f, 0.599f, 0.28f - offset);
+                }
+            }
+            gameObject.AddComponent<Classes.Button>().relatedText = method.buttonText;
+
+            if (shouldOutline)
+            {
+                OutlineObj(gameObject, !method.enabled);
+            }
+
+            GradientColorKey[] pressedColors = new GradientColorKey[3];
+            pressedColors[0].color = buttonClickedA;
+            pressedColors[0].time = 0f;
+            pressedColors[1].color = buttonClickedB;
+            pressedColors[1].time = 0.5f;
+            pressedColors[2].color = buttonClickedA;
+            pressedColors[2].time = 1f;
+
+            GradientColorKey[] releasedColors = new GradientColorKey[3];
+            releasedColors[0].color = buttonDefaultA;
+            releasedColors[0].time = 0f;
+            releasedColors[1].color = buttonDefaultB;
+            releasedColors[1].time = 0.5f;
+            releasedColors[2].color = buttonDefaultA;
+            releasedColors[2].time = 1f;
+
+            GradientColorKey[] selectedColors = new GradientColorKey[3];
+            selectedColors[0].color = Color.red;
+            selectedColors[0].time = 0f;
+            selectedColors[1].color = buttonDefaultB;
+            selectedColors[1].time = 0.5f;
+            selectedColors[2].color = Color.red;
+            selectedColors[2].time = 1f;
+
+            ColorChanger colorChanger = gameObject.AddComponent<ColorChanger>();
+            if (method.enabled)
+            {
+                colorChanger.isRainbow = themeType == 6;
+                colorChanger.isPastelRainbow = themeType == 51;
+                colorChanger.isEpileptic = themeType == 47;
+                colorChanger.isMonkeColors = themeType == 8;
+                colorChanger.colors = new Gradient
+                {
+                    colorKeys = pressedColors
+                };
+            }
+            else
+            {
+                colorChanger.isRainbow = false;
+                colorChanger.isPastelRainbow = false;
+                colorChanger.isEpileptic = false;
+                colorChanger.isMonkeColors = false;
+                colorChanger.colors = new Gradient
+                {
+                    colorKeys = releasedColors
+                };
+            }
+            if (joystickMenu && buttonIndex == joystickButtonSelected)
+            {
+                joystickSelectedButton = method.buttonText;
+                colorChanger.isRainbow = false;
+                colorChanger.isMonkeColors = false;
+                if (method.enabled)
+                {
+                    selectedColors[1].color = buttonClickedB;
+                }
+                colorChanger.colors = new Gradient
+                {
+                    colorKeys = selectedColors
+                };
+            }
+            colorChanger.Start();
+            Text text2 = new GameObject
+            {
+                transform =
+                {
+                    parent = canvasObj.transform
+                }
+            }.AddComponent<Text>();
+            text2.font = activeFont;
+            text2.text = method.buttonText;
+            if (method.overlapText != null)
+            {
+                text2.text = method.overlapText;
+            }
+            if (lowercaseMode)
+            {
+                text2.text = text2.text.ToLower();
+            }
+            if (favorites.Contains(method.buttonText))
+            {
+                text2.text += " ✦";
+            }
+            text2.supportRichText = true;
+            text2.fontSize = 1;
+            text2.color = textColor;
+            if (method.enabled)
+            {
+                text2.color = textClicked;
+            }
+            if (joystickMenu && buttonIndex == joystickButtonSelected)
+            {
+                if (themeType == 30)
+                {
+                    text2.color = Color.red;
+                }
+            }
+            text2.alignment = TextAnchor.MiddleCenter;
+            text2.fontStyle = activeFontStyle;
+            text2.resizeTextForBestFit = true;
+            text2.resizeTextMinSize = 0;
+            RectTransform component = text2.GetComponent<RectTransform>();
+            component.localPosition = Vector3.zero;
+            component.sizeDelta = new Vector2(.2f, .03f);
+            if (NoAutoSizeText)
+            {
+                component.sizeDelta = new Vector2(9f, 0.015f);
+            }
+            component.localPosition = new Vector3(.064f, 0, .111f - offset / 2.6f);
+            component.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
+        }
+
         private static void AddSearchButton()
         {
             GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -1446,101 +1539,125 @@ namespace iiMenu.Menu
 
         private static void AddReturnButton(bool offcenteredPosition)
         {
-            GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            if (!UnityInput.Current.GetKey(KeyCode.Q) && !isPcWhenSearching)
+            if (buttonsType == 2 || buttonsType == 3 || buttonsType == 4 || buttonsType == 5 || buttonsType == 21 || buttonsType == 22 || buttonsType == 28 || buttonsType == 30) // All settings
             {
-                gameObject.layer = 2;
+                AddMiniButton(0.86f, -2, GetIndex("Back (Settings)"));
             }
-            UnityEngine.Object.Destroy(gameObject.GetComponent<Rigidbody>());
-            if (themeType == 30)
+            else if (buttonsType == 14 || buttonsType == 15) // Sound and projectile mods
             {
-                gameObject.GetComponent<Renderer>().enabled = false;
+                AddMiniButton(0.86f, -2, GetIndex("Back (Spam)"));
             }
-            gameObject.GetComponent<BoxCollider>().isTrigger = true;
-            gameObject.transform.parent = menu.transform;
-            gameObject.transform.rotation = Quaternion.identity;
-
-            gameObject.transform.localScale = new Vector3(0.09f, 0.102f, 0.08f);
-            // Fat menu theorem
-            // To get the fat position of a button:
-            // original x * (0.7 / 0.45) or 1.555555556
-            if (FATMENU)
+            else if (buttonsType == 18) // Soundboard
             {
-                gameObject.transform.localPosition = new Vector3(0.56f, -0.450f, -0.58f);
+                AddMiniButton(0.86f, -2, GetIndex("Back (Fun)"));
+            }
+            else if (buttonsType == 20) // Presets
+            {
+                AddMiniButton(0.86f, -2, GetIndex("Back (Menu Set.)"));
+            }
+            else if (buttonsType == 26) // Presets
+            {
+                AddMiniButton(0.86f, -2, GetIndex("Back (Soundboard)"));
             }
             else
             {
-                gameObject.transform.localPosition = new Vector3(0.56f, -0.7f, -0.58f);
+                AddMiniButton(0.86f, -2, GetIndex("Home"));
             }
-            if (offcenteredPosition)
-            {
-                gameObject.transform.localPosition += new Vector3(0f, 0.16f, 0f);
-            }
-            gameObject.AddComponent<Classes.Button>().relatedText = "Global Return";
+            //GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            //if (!UnityInput.Current.GetKey(KeyCode.Q) && !isPcWhenSearching)
+            //{
+            //    gameObject.layer = 2;
+            //}
+            //UnityEngine.Object.Destroy(gameObject.GetComponent<Rigidbody>());
+            //if (themeType == 30)
+            //{
+            //    gameObject.GetComponent<Renderer>().enabled = false;
+            //}
+            //gameObject.GetComponent<BoxCollider>().isTrigger = true;
+            //gameObject.transform.parent = menu.transform;
+            //gameObject.transform.rotation = Quaternion.identity;
 
-            if (shouldOutline)
-            {
-                OutlineObj(gameObject, true);
-            }
+            //gameObject.transform.localScale = new Vector3(0.09f, 0.122f, 0.1f);
+            //// Fat menu theorem
+            //// To get the fat position of a button:
+            //// original x * (0.7 / 0.45) or 1.555555556
+            //if (FATMENU)
+            //{
+            //    gameObject.transform.localPosition = new Vector3(0.56f, -0.450f, -0.58f);
+            //}
+            //else
+            //{
+            //    gameObject.transform.localPosition = new Vector3(0.56f, -0.7f, -0.58f);
+            //}
+            //if (offcenteredPosition)
+            //{
+            //    gameObject.transform.localPosition += new Vector3(0f, 0.45f, 0f);
+            //}
+            //gameObject.AddComponent<Classes.Button>().relatedText = "Global Return";
 
-            GradientColorKey[] releasedColors = new GradientColorKey[3];
-            releasedColors[0].color = buttonDefaultA;
-            releasedColors[0].time = 0f;
-            releasedColors[1].color = buttonDefaultB;
-            releasedColors[1].time = 0.5f;
-            releasedColors[2].color = buttonDefaultA;
-            releasedColors[2].time = 1f;
+            //if (shouldOutline)
+            //{
+            //    OutlineObj(gameObject, true);
+            //}
 
-            ColorChanger colorChanger = gameObject.AddComponent<ColorChanger>();
-            colorChanger.isRainbow = false;
-            colorChanger.isEpileptic = false;
-            colorChanger.isMonkeColors = false;
-            colorChanger.colors = new Gradient
-            {
-                colorKeys = releasedColors
-            };
-            colorChanger.Start();
-            Image image = new GameObject
-            {
-                transform =
-                {
-                    parent = canvasObj.transform
-                }
-            }.AddComponent<Image>();
-            if (returnIcon == null)
-            {
-                returnIcon = LoadTextureFromResource("iiMenu.Resources.return.png");
-            }
-            if (returnMat == null)
-            {
-                returnMat = new Material(image.material);
-            }
-            image.material = returnMat;
-            image.material.SetTexture("_MainTex", returnIcon);
-            image.color = textColor;
-            RectTransform component = image.GetComponent<RectTransform>();
-            component.localPosition = Vector3.zero;
-            component.sizeDelta = new Vector2(.03f, .03f);
-            if (FATMENU)
-            {
-                component.localPosition = new Vector3(.064f, -0.35f / 2.6f, -0.58f / 2.6f);
-            }
-            else
-            {
-                component.localPosition = new Vector3(.064f, -0.54444444444f / 2.6f, -0.58f / 2.6f);
-            }
-            if (offcenteredPosition)
-            {
-                component.localPosition += new Vector3(0f, 0.0475f, 0f);
-            }
-            component.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
+            //GradientColorKey[] releasedColors = new GradientColorKey[3];
+            //releasedColors[0].color = buttonDefaultA;
+            //releasedColors[0].time = 0f;
+            //releasedColors[1].color = buttonDefaultB;
+            //releasedColors[1].time = 0.5f;
+            //releasedColors[2].color = buttonDefaultA;
+            //releasedColors[2].time = 1f;
+
+            //ColorChanger colorChanger = gameObject.AddComponent<ColorChanger>();
+            //colorChanger.isRainbow = false;
+            //colorChanger.isEpileptic = false;
+            //colorChanger.isMonkeColors = false;
+            //colorChanger.colors = new Gradient
+            //{
+            //    colorKeys = releasedColors
+            //};
+            //colorChanger.Start();
+            //Image image = new GameObject
+            //{
+            //    transform =
+            //    {
+            //        parent = canvasObj.transform
+            //    }
+            //}.AddComponent<Image>();
+            //if (returnIcon == null)
+            //{
+            //    returnIcon = LoadTextureFromResource("iiMenu.Resources.return.png");
+            //}
+            //if (returnMat == null)
+            //{
+            //    returnMat = new Material(image.material);
+            //}
+            //image.material = returnMat;
+            //image.material.SetTexture("_MainTex", returnIcon);
+            //image.color = textColor;
+            //RectTransform component = image.GetComponent<RectTransform>();
+            //component.localPosition = Vector3.zero;
+            //component.sizeDelta = new Vector2(.03f, .03f);
+            //if (FATMENU)
+            //{
+            //    component.localPosition = new Vector3(.064f, -0.35f / 2.6f, -0.58f / 2.6f);
+            //}
+            //else
+            //{
+            //    component.localPosition = new Vector3(.064f, -0.54444444444f / 2.6f, -0.58f / 2.6f);
+            //}
+            //if (offcenteredPosition)
+            //{
+            //    component.localPosition += new Vector3(0f, 0.1575f, 0f);
+            //}
+            //component.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
         }
 
         public static void CreateReference()
         {
             reference = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             reference.transform.parent = rightHand || (bothHands && ControllerInputPoller.instance.rightControllerSecondaryButton) ? GorillaTagger.Instance.leftHandTransform : GorillaTagger.Instance.rightHandTransform;
-            reference.GetComponent<Renderer>().material.color = bgColorA;
+            UnityEngine.Object.Destroy(reference.GetComponent<Renderer>());
             reference.transform.localPosition = pointerOffset;
             reference.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
             buttonCollider = reference.GetComponent<SphereCollider>();
@@ -1794,7 +1911,7 @@ namespace iiMenu.Menu
                 }
             }.AddComponent<Text>();
             text.font = activeFont;
-            text.text = "ii's <b>Stupid</b> Menu";
+            text.text = "Artemius466's Menu";
             if (doCustomName)
             {
                 text.text = customMenuName;
@@ -1853,7 +1970,7 @@ namespace iiMenu.Menu
                 }
             }.AddComponent<Text>();
             text.font = activeFont;
-            text.text = "Build " + PluginInfo.Version;
+            text.text = "Created by Artemius466";
             if (themeType == 30)
             {
                 text.text = "";
@@ -1946,7 +2063,7 @@ namespace iiMenu.Menu
             {
                 if (!disableReturnButton && buttonsType != 0)
                 {
-                    AddReturnButton(false);
+                    AddReturnButton(true);
                 }
             }
 
@@ -3963,6 +4080,7 @@ namespace iiMenu.Menu
                         }
                     }
                 }
+<<<<<<< Updated upstream
 
                 if (Fun.keyboardTrackerEnabled && data.Code == 200)
                 {
@@ -4219,6 +4337,8 @@ namespace iiMenu.Menu
                             break;
                     }
                 }
+=======
+>>>>>>> Stashed changes
             } catch { }
         }
 
@@ -4568,7 +4688,7 @@ namespace iiMenu.Menu
         public static void OnLaunch()
         {
             UnityEngine.Debug.Log(ascii);
-            UnityEngine.Debug.Log("Thank you for using ii's Stupid Menu!");
+            UnityEngine.Debug.Log("Thank you for using Artemius466's Shit Menu!");
             try
             {
                 if (!Font.GetOSInstalledFontNames().Contains("Agency FB"))
@@ -4688,11 +4808,7 @@ namespace iiMenu.Menu
                              |_|                                     
 ";
 
-        public static string motdTemplate = "You are using build {0}. This menu was created by iiDk (@goldentrophy) on discord. " +
-        "This menu is completely free and open sourced, if you paid for this menu you have been scammed. " +
-        "There are a total of <b>{1}</b> mods on this menu. " +
-        "<color=red>I, iiDk, am not responsible for any bans using this menu.</color> " +
-        "If you get banned while using this, it's your responsibility.";
+        public static string motdTemplate = "You have been scammed for many money hehe";
 
         public static bool shouldBePC = false;
         public static bool rightPrimary = false;
