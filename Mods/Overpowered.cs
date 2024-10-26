@@ -24,16 +24,6 @@ namespace iiMenu.Mods
 {
     public class Overpowered
     {
-        public static void BreakInfection1()
-        {
-            foreach (Player player in PhotonNetwork.PlayerList)
-            {
-                Player player2 = player;
-                Hashtable hashtable = new Hashtable();
-                hashtable.Add("didTutorial", "nope");
-                player2.SetCustomProperties(hashtable, null, null);
-            }
-        }
 
         public static void MasterCheck()
         {
@@ -47,7 +37,6 @@ namespace iiMenu.Mods
             }
         }
 
-<<<<<<< Updated upstream
         public static void StartMoonEvent()
         {
             GreyZoneManager gzm = GameObject.Find("Environment Objects/05Maze_PersistentObjects/Halloween2024_PersistentObjects/GreyZoneManager").GetComponent<GreyZoneManager>();
@@ -89,7 +78,6 @@ namespace iiMenu.Mods
             else { NotifiLib.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> <color=white>You are not master client.</color>"); }
         }
 
-=======
         public static void LurkerGun()
         {
             LurkerGhost lg = GameObject.Find("Environment Objects/05Maze_PersistentObjects/Halloween2024_PersistentObjects/Halloween Ghosts/Lurker Ghost/GhostLurker_Prefab").GetComponent<LurkerGhost>();
@@ -107,7 +95,7 @@ namespace iiMenu.Mods
                     Type type = typeof(LurkerGhost).Assembly.GetType("GorillaTagScripts.LurkerGhost+ghostState");
                     object val = Enum.ToObject(type, 1);
 
-                    NotifiLib.SendNotification(val.ToString());
+                    //NotifiLib.SendNotification(val.ToString());
 
                     Debug.Log(val);
 
@@ -196,7 +184,6 @@ namespace iiMenu.Mods
             }
         }
 
->>>>>>> Stashed changes
         public static void SpawnBlueLucy()
         {
             HalloweenGhostChaser hgc = GameObject.Find("Environment Objects/05Maze_PersistentObjects/Halloween2024_PersistentObjects/Halloween Ghosts/Lucy/Halloween Ghost/FloatingChaseSkeleton/").GetComponent<HalloweenGhostChaser>();

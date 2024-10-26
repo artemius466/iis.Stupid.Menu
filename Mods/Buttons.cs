@@ -447,13 +447,10 @@ namespace iiMenu.Menu
                 new ButtonInfo { buttonText = "No Tag on Join", method =() => Advantages.NoTagOnJoin(), disableMethod =() => Advantages.TagOnJoin(), toolTip = "When you join a the room, you won't be tagged when you join."},
                 new ButtonInfo { buttonText = "Untag Self", method =() => Advantages.UntagSelf(), isTogglable = false, toolTip = "Removes you from the list of tagged players."},
                 new ButtonInfo { buttonText = "Anti Tag", method =() => Advantages.AntiTag(), disableMethod =() => Advantages.TagOnJoin(), toolTip = "Removes you from the list of tagged players when tagged."},
-<<<<<<< Updated upstream
-=======
 
                 new ButtonInfo { buttonText = "Infection to Tag", method =() => Overpowered.InfectionToTag(), isTogglable = false, toolTip = "Turns the game into tag instead of infection." },
                 new ButtonInfo { buttonText = "Tag to Infection", method =() => Overpowered.TagToInfection(), isTogglable = false, toolTip = "Turns the game into infection instead of tag." },
-                new ButtonInfo { buttonText = "Break Infection", method =() => Overpowered.BreakInfection1(), isTogglable = false, toolTip = "Breaks the infection gamemode." },
->>>>>>> Stashed changes
+                //new ButtonInfo { buttonText = "Break Infection", method =() => Overpowered.BreakInfection1(), isTogglable = false, toolTip = "Breaks the infection gamemode." },
             },
 
             new ButtonInfo[] { // Visual Mods [11]
@@ -769,16 +766,14 @@ namespace iiMenu.Menu
 
                 new ButtonInfo { buttonText = "Master Check", method =() => Overpowered.MasterCheck(), isTogglable = false, toolTip = "Checks if you are master client."},
 
-<<<<<<< Updated upstream
                 new ButtonInfo { buttonText = "Start Moon Event", method =() => Overpowered.StartMoonEvent(), isTogglable = false, toolTip = "Starts the moon event."},
                 new ButtonInfo { buttonText = "End Moon Event", method =() => Overpowered.EndMoonEvent(), isTogglable = false, toolTip = "Ends the moon event."},
                 new ButtonInfo { buttonText = "Spaz Moon Event", method =() => Overpowered.FlashScreen(), toolTip = "Spazzes out the moon event."},
-=======
+
                 new ButtonInfo { buttonText = "Spawn Lurker", method =() => Overpowered.SpawnLurker(), isTogglable = false, toolTip = "Summons the lurker (that monke monke ghost)." },
                 new ButtonInfo { buttonText = "Lurker Chase Gun", method =() => Overpowered.LurkerGun(), isTogglable = true, toolTip = "Summons the lurker (that monke monke ghost)." },
                 new ButtonInfo { buttonText = "Despawn Lurker", method =() => Overpowered.DespawnLurker(), isTogglable = false, toolTip = "Despawns the lurker (that monke monke ghost)." },
                 new ButtonInfo { buttonText = "See Lurker", method =() => Overpowered.SeeLurker(), isTogglable = true, toolTip = "Makes you see the lurker ghost." },
->>>>>>> Stashed changes
 
                 new ButtonInfo { buttonText = "Spawn Red Lucy", method =() => Overpowered.SpawnRedLucy(), isTogglable = false, toolTip = "Summons the red Lucy in forest." },
                 new ButtonInfo { buttonText = "Spawn Blue Lucy", method =() => Overpowered.SpawnBlueLucy(), isTogglable = false, toolTip = "Summons the blue Lucy in forest." },
@@ -855,7 +850,7 @@ namespace iiMenu.Menu
                 //new ButtonInfo { buttonText = "Exit Overpowered Mods", method =() => Settings.ReturnToMain(), isTogglable = false, toolTip = "Returns you back to the main page."},
 
                 new ButtonInfo { buttonText = "Freeze All <color=grey>[</color><color=green>T</color><color=grey>]</color>", method =() => Overpowered.FreezeAll(), toolTip = "Freezes everyone in the lobby when holding <color=green>trigger</color>." },
-                new ButtonInfo { buttonText = "Break leaderboard and infection <color=grey>[</color><color=red>VERY OP</color><color=grey>]</color>", method =() => Overpowered.FreezeAll(), isTogglable = false, toolTip = "Breaks infection and leaderboard." },
+                //new ButtonInfo { buttonText = "Break leaderboard and infection <color=grey>[</color><color=red>VERY OP</color><color=grey>]</color>", method =() => Overpowered.FreezeAll(), isTogglable = false, toolTip = "Breaks infection and leaderboard." },
                 //new ButtonInfo { buttonText = "Attic Fling Gun", method =() => Overpowered.AtticFlingGun(), toolTip = "Flings whoever your hand desires in the attic." },
                 //new ButtonInfo { buttonText = "Attic Fling All <color=grey>[</color><color=green>T</color><color=grey>]</color>", method =() => Overpowered.AtticFlingAll(), toolTip = "Flings everyone in the attic when holding <color=green>trigger</color>." },
                 
