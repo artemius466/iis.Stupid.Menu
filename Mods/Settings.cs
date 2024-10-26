@@ -1300,7 +1300,7 @@ namespace iiMenu.Mods
 
             Vector3[] pointerPos = new Vector3[]
             {
-                new Vector3(0f, -0.1f, 0f),
+                //new Vector3(0f, -0.1f, 0f),
                 new Vector3(-0.01f, -0.09f, 0.027f)
             };
             pointerOffset = pointerPos[pointerIndex];
@@ -1900,7 +1900,7 @@ namespace iiMenu.Mods
                 Projectiles.ChangeTrail();
                 shootCycle = int.Parse(data[7]) - 1;
                 Projectiles.ChangeShootSpeed();
-                pointerIndex = 1;
+                pointerIndex = 0;
                 ChangePointerPosition();
                 tagAuraIndex = int.Parse(data[9]) - 1;
                 Advantages.ChangeTagAuraRange();
@@ -1927,11 +1927,11 @@ namespace iiMenu.Mods
                 Sound.SoundBindings();
             } catch { UnityEngine.Debug.Log("Save file out of date"); }
 
-            pageButtonType = 5;
+            pageButtonType = 4;
             Toggle("Change Page Type");
-            themeType = 39;
+            themeType = 38;
             Toggle("Change Menu Theme");
-            fontCycle = 4;
+            fontCycle = 3;
             Toggle("Change Font Type");
 
             NotifiLib.ClearAllNotifications();
